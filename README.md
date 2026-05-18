@@ -20,7 +20,7 @@ Users can deliver various types of waste to designated collection points and ear
 |-------|-------------|
 | Frontend | HTML, CSS, JavaScript |
 | Backend | PHP |
-| Database | MySQL, SQL |
+| Database | MySQL|
 | Other | AJAX, JSON, SHA-256 |
 
 ## 📚 Academic Context
