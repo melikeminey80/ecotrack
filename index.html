@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EcoTrack — Recycle &amp; Earn</title>
+  <meta name="description" content="Turn your recyclable waste into reward points. Find a collection point, drop off your waste, earn points and redeem amazing rewards with EcoTrack."/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    /* ── HERO ── */
+    #hero { min-height:100vh; display:flex; align-items:center; padding:120px 60px 80px; position:relative; overflow:hidden; justify-content:center; }
+    .blob { position:absolute; border-radius:50%; filter:blur(60px); opacity:.25; z-index:0; }
+    .blob-1 { width:420px; height:420px; background:var(--green-mid); top:-80px; left:-100px; }
+    .blob-2 { width:300px; height:300px; background:var(--gold); bottom:60px; right:80px; }
+    .blob-3 { width:200px; height:200px; background:var(--blue); top:200px; right:300px; }
+    .hero-content { position:relative; z-index:1; max-width:620px; }
+    .hero-tag { display:inline-block; background:var(--green-pale); color:var(--green-dark); font-weight:800; font-size:.82rem; padding:6px 16px; border-radius:50px; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:22px; animation:fadeUp .6s ease both; }
+    .hero-title { font-family:'Playfair Display',serif; font-size:clamp(2.8rem,5vw,4.2rem); line-height:1.1; color:var(--green-dark); margin-bottom:24px; animation:fadeUp .7s .1s ease both; }
+    .hero-title span { color:var(--orange); }
+    .hero-desc { font-size:1.1rem; line-height:1.75; color:var(--text-mid); margin-bottom:40px; animation:fadeUp .7s .2s ease both; }
+    .hero-btns { display:flex; gap:16px; flex-wrap:wrap; animation:fadeUp .7s .3s ease both; }
+    .btn-primary { background:var(--green-dark); color:#fff; padding:14px 36px; border-radius:50px; font-weight:800; font-size:1rem; text-decoration:none; box-shadow:0 8px 24px rgba(45,106,79,.3); transition:transform .2s,box-shadow .2s; }
+    .btn-primary:hover { transform:translateY(-3px); }
+    .btn-secondary { background:transparent; color:var(--green-dark); padding:14px 36px; border-radius:50px; font-weight:800; font-size:1rem; text-decoration:none; border:2.5px solid var(--green-dark); transition:background .2s,color .2s; }
+    .btn-secondary:hover { background:var(--green-dark); color:#fff; }
+
+    /* ── STATS ── */
+    .stats-strip { background:var(--green-dark); padding:32px 60px; display:flex; justify-content:center; gap:80px; flex-wrap:wrap; }
+    .stat { text-align:center; color:#fff; }
+    .stat-num { font-family:'Playfair Display',serif; font-size:2.4rem; font-weight:900; color:var(--green-light); }
+    .stat-label { font-size:.9rem; opacity:.8; margin-top:4px; }
+
+    /* ── HOW IT WORKS ── */
+    #how { padding:100px 60px; background:var(--cream); }
+    .section-header { text-align:center; margin-bottom:64px; }
+    .section-tag { display:inline-block; background:var(--green-pale); color:var(--green-dark); font-weight:800; font-size:.78rem; padding:5px 14px; border-radius:50px; text-transform:uppercase; letter-spacing:1.5px; margin-bottom:14px; }
+    .section-title { font-family:'Playfair Display',serif; font-size:clamp(2rem,3.5vw,3rem); color:var(--green-dark); line-height:1.2; }
+    .steps { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:32px; max-width:1100px; margin:0 auto; }
+    .step-card { background:#fff; border-radius:24px; padding:36px 28px; text-align:center; box-shadow:0 4px 24px rgba(45,106,79,.08); border:1.5px solid var(--green-pale); transition:transform .25s,box-shadow .25s; position:relative; }
+    .step-card:hover { transform:translateY(-8px); }
+    .step-num { position:absolute; top:-18px; left:50%; transform:translateX(-50%); background:var(--green-dark); color:#fff; width:36px; height:36px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:.9rem; }
+    .step-icon { font-size:2.8rem; margin-bottom:18px; }
+    .step-title { font-weight:800; font-size:1.1rem; color:var(--green-dark); margin-bottom:10px; }
+    .step-desc { font-size:.92rem; color:var(--text-mid); line-height:1.6; }
+
+    /* ── WASTE TYPES ── */
+    #waste { padding:80px 60px; background:linear-gradient(135deg,var(--green-pale) 0%,var(--cream) 100%); }
+    .waste-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:24px; max-width:1000px; margin:0 auto; }
+    .waste-card { background:#fff; border-radius:20px; padding:28px 16px; text-align:center; box-shadow:0 2px 16px rgba(45,106,79,.07); border:1.5px solid var(--green-pale); transition:transform .2s; }
+    .waste-card:hover { transform:translateY(-5px); }
+    .waste-emoji { font-size:2.4rem; margin-bottom:12px; }
+    .waste-name { font-weight:800; font-size:1rem; color:var(--green-dark); margin-bottom:6px; }
+    .waste-pts { display:inline-block; background:var(--green-pale); color:var(--green-dark); font-weight:800; font-size:.82rem; padding:3px 12px; border-radius:50px; }
+
+    /* ── REWARDS ── */
+    #rewards { padding:100px 60px; background:var(--cream); }
+    .rewards-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:28px; max-width:1100px; margin:0 auto; }
+    .reward-card { background:var(--green-dark); border-radius:24px; padding:32px 24px; text-align:center; color:#fff; transition:transform .25s,box-shadow .25s; box-shadow:0 6px 24px rgba(45,106,79,.2); }
+    .reward-card:hover { transform:translateY(-8px); }
+    .reward-emoji { font-size:2.6rem; margin-bottom:16px; }
+    .reward-name { font-weight:800; font-size:1.05rem; margin-bottom:10px; }
+    .reward-pts { background:rgba(255,255,255,.15); border-radius:50px; padding:5px 16px; font-size:.85rem; font-weight:700; color:var(--green-light); }
+
+    @media(max-width:900px) {
+      #hero { padding:120px 24px 80px; }
+      .stats-strip { gap:40px; padding:32px 24px; }
+      #how, #waste, #rewards { padding:80px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">Eco<span>Track</span></div>
+  <div class="mobile-btn" onclick="toggleNav()">☰</div>
+  <ul id="nav-ul">
+    <li><a href="#how" onclick="if(window.innerWidth<=900)toggleNav()">How It Works</a></li>
+    <li><a href="#waste" onclick="if(window.innerWidth<=900)toggleNav()">Waste Types</a></li>
+    <li><a href="#rewards" onclick="if(window.innerWidth<=900)toggleNav()">Rewards</a></li>
+    <li><a href="register.html" class="nav-btn">Log In</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+  <div class="hero-content">
+    <span class="hero-tag">♻️ Recycle · Earn · Reward</span>
+    <h1 class="hero-title">Turn Your Waste Into <span>Rewards</span></h1>
+    <p class="hero-desc">Drop off your recyclables at the nearest collection point, earn points for every kilogram, and redeem them for amazing rewards. Together, let's build a greener future.</p>
+    <div class="hero-btns">
+      <a href="register.html" class="btn-primary">Start Earning Points</a>
+      <a href="#how" class="btn-secondary">Learn How</a>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="section-header">
+    <span class="section-tag">Simple Steps</span>
+    <h2 class="section-title">How EcoTrack Works</h2>
+  </div>
+  <div class="steps">
+    <div class="step-card"
+onclick="window.location.href='register.html?tab=register'"
+style="cursor:pointer;"><div class="step-num">1</div><div class="step-icon">📝</div><div class="step-title">Register</div><div class="step-desc">Create your free account as an individual or company in seconds.</div></div>
+    <div class="step-card"><div class="step-num">2</div><div class="step-icon">🗺️</div><div class="step-title">Find a Point</div><div class="step-desc">Locate the nearest waste collection point in your city.</div></div>
+    <div class="step-card"><div class="step-num">3</div><div class="step-icon">♻️</div><div class="step-title">Deliver Waste</div><div class="step-desc">Drop off your sorted recyclables — plastic, glass, paper, metal or e-waste.</div></div>
+    <div class="step-card"><div class="step-num">4</div><div class="step-icon">⭐</div><div class="step-title">Earn Points</div><div class="step-desc">Points are automatically added to your account based on weight &amp; type.</div></div>
+    <div class="step-card"><div class="step-num">5</div><div class="step-icon">🎁</div><div class="step-title">Get Rewards</div><div class="step-desc">Redeem your points for discount coupons, eco gifts, and more!</div></div>
+  </div>
+</section>
+
+
+<!-- WASTE TYPES -->
+<section id="waste">
+  <div class="section-header">
+    <span class="section-tag">What We Accept</span>
+    <h2 class="section-title">Waste Types & Points</h2>
+  </div>
+  <div class="waste-grid">
+    <div class="waste-card"><div class="waste-emoji">🧴</div><div class="waste-name">Plastic</div><div class="waste-pts">5 pts / kg</div></div>
+    <div class="waste-card"><div class="waste-emoji">🍶</div><div class="waste-name">Glass</div><div class="waste-pts">3 pts / kg</div></div>
+    <div class="waste-card"><div class="waste-emoji">📰</div><div class="waste-name">Paper</div><div class="waste-pts">2 pts / kg</div></div>
+    <div class="waste-card"><div class="waste-emoji">🔩</div><div class="waste-name">Metal</div><div class="waste-pts">7 pts / kg</div></div>
+    <div class="waste-card"><div class="waste-emoji">💻</div><div class="waste-name">E-Waste</div><div class="waste-pts">15 pts / kg</div></div>
+  </div>
+</section>
+
+<!-- REWARDS -->
+<section id="rewards">
+  <div class="section-header">
+    <span class="section-tag">Redeem Points</span>
+    <h2 class="section-title">Available Rewards</h2>
+  </div>
+  <div class="rewards-grid">
+    <div class="reward-card"><div class="reward-emoji">🎟️</div><div class="reward-name">50 TL Discount Coupon</div><div class="reward-pts">50 points</div></div>
+    <div class="reward-card"><div class="reward-emoji">🎫</div><div class="reward-name">100 TL Discount Coupon</div><div class="reward-pts">100 points</div></div>
+    <div class="reward-card"><div class="reward-emoji">🌳</div><div class="reward-name">Tree Donation</div><div class="reward-pts">75 points</div></div>
+    <div class="reward-card"><div class="reward-emoji">🛍️</div><div class="reward-name">Cloth Bag</div><div class="reward-pts">150 points</div></div>
+    <div class="reward-card"><div class="reward-emoji">✏️</div><div class="reward-name">Plantable Pen</div><div class="reward-pts">30 points</div></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Eco<span>Track</span></div>
+  <div class="footer-text">© 2026 EcoTrack. All rights reserved.</div>
+  <div class="footer-text">Built for a greener tomorrow 🌍</div>
+</footer>
+
+<script>
+  function toggleNav() {
+    document.getElementById('nav-ul').classList.toggle('active');
+  }
+</script>
+</body>
+</html>

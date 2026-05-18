@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EcoTrack — Login &amp; Register</title>
+  <meta name="description" content="Create your EcoTrack account or log in to start earning points by recycling."/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Override body background slightly for auth page */
+    .auth-page-wrapper {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 120px 24px 60px;
+    }
+
+    /* ── AUTH CARD ── */
+    .auth-card {
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(20px);
+      border-radius: 32px;
+      box-shadow: 0 20px 60px rgba(45,106,79,.18);
+      width: 100%;
+      max-width: 480px;
+      overflow: hidden;
+      animation: fadeUp .5s ease both;
+    }
+
+    .auth-card-header {
+      background: var(--green-dark);
+      padding: 36px 40px 28px;
+      text-align: center;
+    }
+    .auth-card-header .logo {
+      font-size: 2rem;
+      margin-bottom: 8px;
+      display: block;
+    }
+    .auth-card-header p {
+      color: var(--green-light);
+      font-size: .92rem;
+      opacity: .85;
+    }
+
+    /* ── TABS ── */
+    .auth-tabs {
+      display: flex;
+      margin: 0;
+      border-bottom: 2px solid var(--green-pale);
+    }
+    .auth-tab {
+      flex: 1;
+      padding: 16px;
+      text-align: center;
+      font-weight: 800;
+      font-size: .95rem;
+      cursor: pointer;
+      color: var(--text-mid);
+      background: transparent;
+      border: none;
+      font-family: 'Nunito', sans-serif;
+      transition: background .2s, color .2s, border-bottom .2s;
+      border-bottom: 3px solid transparent;
+    }
+    .auth-tab.active {
+      color: var(--green-dark);
+      border-bottom: 3px solid var(--green-dark);
+      background: var(--green-pale);
+    }
+
+    /* ── FORMS ── */
+    .auth-body { padding: 36px 40px; }
+    .auth-form { display: none; flex-direction: column; gap: 18px; }
+    .auth-form.active { display: flex; }
+
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group label { font-weight: 700; font-size: .88rem; color: var(--text-mid); }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 13px 18px;
+      border: 2px solid var(--green-light);
+      border-radius: 14px;
+      font-size: .95rem;
+      font-family: 'Nunito', sans-serif;
+      color: var(--text-dark);
+      outline: none;
+      transition: border .2s, box-shadow .2s;
+      background: #fafafa;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--green-mid);
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(82,183,136,.12);
+    }
+
+    /* ── VALIDATION ── */
+    .field-error {
+      font-size: .8rem;
+      color: #e63946;
+      margin-top: 4px;
+      display: none;
+    }
+    .field-error.visible { display: block; }
+    .form-group input.invalid,
+    .form-group select.invalid {
+      border-color: #e63946 !important;
+      background: #fff5f5 !important;
+      box-shadow: 0 0 0 4px rgba(230,57,70,.1) !important;
+    }
+    .form-group input.valid,
+    .form-group select.valid {
+      border-color: var(--green-mid) !important;
+    }
+
+    .auth-submit {
+      background: var(--green-dark);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 15px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      transition: background .2s, transform .2s;
+      box-shadow: 0 6px 20px rgba(45,106,79,.25);
+      margin-top: 6px;
+    }
+    .auth-submit:hover { background: var(--green-mid); transform: translateY(-2px); }
+
+    .auth-switch {
+      text-align: center;
+      font-size: .88rem;
+      color: var(--text-mid);
+      margin-top: 4px;
+    }
+    .auth-switch a { color: var(--green-dark); font-weight: 800; text-decoration: none; }
+    .auth-switch a:hover { text-decoration: underline; }
+
+    /* ── back link ── */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--green-light);
+      text-decoration: none;
+      font-size: .88rem;
+      font-weight: 700;
+      margin-top: 8px;
+      opacity: .85;
+      transition: opacity .2s;
+    }
+    .back-link:hover { opacity: 1; }
+
+    @media(max-width:520px) {
+      .auth-card-header { padding: 28px 24px 20px; }
+      .auth-body { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="logo">Eco<span>Track</span></a>
+  <div class="mobile-btn" onclick="toggleNav()">☰</div>
+  <ul id="nav-ul">
+    <li><a href="index.html#how" onclick="if(window.innerWidth<=900)toggleNav()">How It Works</a></li>
+    <li><a href="index.html#waste" onclick="if(window.innerWidth<=900)toggleNav()">Waste Types</a></li>
+    <li><a href="index.html#rewards" onclick="if(window.innerWidth<=900)toggleNav()">Rewards</a></li>
+  </ul>
+</nav>
+
+<div class="auth-page-wrapper">
+  <div class="auth-card">
+
+    <!-- Card Header -->
+    <div class="auth-card-header">
+      <span class="logo">Eco<span style="color:var(--gold)">Track</span></span>
+      <p>♻️ Recycle · Earn · Reward</p>
+      <a href="index.html" class="back-link">← Back to Home</a>
+    </div>
+
+    <!-- Tabs -->
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-login" onclick="switchTab('login')">Login</button>
+      <button class="auth-tab" id="tab-register" onclick="switchTab('register')">Register</button>
+    </div>
+
+    <!-- Forms -->
+    <div class="auth-body">
+
+      <!-- LOGIN FORM -->
+      <div class="auth-form active" id="form-login">
+        <div class="form-group">
+          <label for="login-email">Email Address</label>
+          <input id="login-email" type="email" placeholder="you@example.com"/>
+          <span class="field-error" id="err-login-email"></span>
+        </div>
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <input id="login-password" type="password" placeholder="••••••••"/>
+          <span class="field-error" id="err-login-password"></span>
+        </div>
+        <button class="auth-submit" onclick="handleLogin()">Login →</button>
+        <p class="auth-switch">No account yet? <a href="#" onclick="switchTab('register'); return false;">Register here</a></p>
+      </div>
+
+      <!-- REGISTER FORM -->
+      <div class="auth-form" id="form-register">
+        <div class="form-group">
+          <label for="acc-type">Account Type</label>
+          <select id="acc-type" onchange="toggleType()">
+            <option value="individual">Individual</option>
+            <option value="company">Company</option>
+          </select>
+          <span class="field-error" id="err-acc-type"></span>
+        </div>
+
+        <!-- Individual fields -->
+        <div id="individual-fields">
+          <div class="form-group">
+            <label for="reg-firstname">First Name</label>
+            <input id="reg-firstname" type="text" placeholder="John"/>
+            <span class="field-error" id="err-reg-firstname"></span>
+          </div>
+          <div class="form-group" style="margin-top:12px">
+            <label for="reg-lastname">Last Name</label>
+            <input id="reg-lastname" type="text" placeholder="Doe"/>
+            <span class="field-error" id="err-reg-lastname"></span>
+          </div>
+        </div>
+
+        <!-- Company fields -->
+        <div id="company-fields" style="display:none">
+          <div class="form-group">
+            <label for="reg-company">Company Name</label>
+            <input id="reg-company" type="text" placeholder="ABC Ltd."/>
+            <span class="field-error" id="err-reg-company"></span>
+          </div>
+          <div class="form-group" style="margin-top:12px">
+            <label for="reg-tax">Tax Number</label>
+            <input id="reg-tax" type="text" placeholder="1234567890"/>
+            <span class="field-error" id="err-reg-tax"></span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="reg-email">Email Address</label>
+          <input id="reg-email" type="email" placeholder="you@example.com"/>
+          <span class="field-error" id="err-reg-email"></span>
+        </div>
+        <div class="form-group">
+          <label for="reg-phone">Phone Number</label>
+          <input id="reg-phone" type="tel" placeholder="0555 000 0000"/>
+          <span class="field-error" id="err-reg-phone"></span>
+        </div>
+        <div class="form-group">
+          <label for="reg-password">Password</label>
+          <input id="reg-password" type="password" placeholder="••••••••"/>
+          <span class="field-error" id="err-reg-password"></span>
+        </div>
+
+        <button class="auth-submit" onclick="handleRegister()">Create Account →</button>
+        <p class="auth-switch">Already have an account? <a href="#" onclick="switchTab('login'); return false;">Log in</a></p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-logo">Eco<span>Track</span></div>
+  <div class="footer-text">© 2026 EcoTrack. All rights reserved.</div>
+  <div class="footer-text">Built for a greener tomorrow 🌍</div>
+</footer>
+
+<script src="auth.js?v=2"></script>
+</body>
+</html>

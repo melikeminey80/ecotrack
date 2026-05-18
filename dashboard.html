@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EcoTrack — Dashboard</title>
+  <meta name="description"
+    content="Your EcoTrack dashboard. Track your recycling points, activity history, and redeem rewards." />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── DASHBOARD LAYOUT ── */
+    .dash-wrapper {
+      flex: 1;
+      padding: 100px 60px 60px;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* ── WELCOME BANNER ── */
+    .welcome-banner {
+      background: linear-gradient(135deg, var(--green-dark) 0%, #1a4a33 100%);
+      border-radius: 28px;
+      padding: 40px 48px;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+      box-shadow: 0 12px 40px rgba(45, 106, 79, .25);
+      animation: fadeUp .5s ease both;
+    }
+
+    .welcome-banner h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      margin-bottom: 6px;
+    }
+
+    .welcome-banner p {
+      opacity: .8;
+      font-size: .95rem;
+    }
+
+    .points-bubble {
+      background: rgba(255, 255, 255, .12);
+      border: 2px solid rgba(255, 255, 255, .2);
+      border-radius: 20px;
+      padding: 20px 36px;
+      text-align: center;
+      backdrop-filter: blur(8px);
+    }
+
+    .points-bubble .pts-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      font-weight: 900;
+      color: var(--green-light);
+      line-height: 1;
+    }
+
+    .points-bubble .pts-label {
+      font-size: .85rem;
+      opacity: .75;
+      margin-top: 4px;
+    }
+
+    /* ── STAT CARDS ── */
+    .stat-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
+      animation: fadeUp .5s .1s ease both;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(16px);
+      border-radius: 22px;
+      padding: 28px 24px;
+      box-shadow: 0 4px 24px rgba(45, 106, 79, .1);
+      border: 1.5px solid var(--green-pale);
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      transition: transform .2s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .stat-card-icon {
+      font-size: 2.2rem;
+      background: var(--green-pale);
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .stat-card-info .sc-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.7rem;
+      font-weight: 900;
+      color: var(--green-dark);
+    }
+
+    .stat-card-info .sc-label {
+      font-size: .83rem;
+      color: var(--text-mid);
+      margin-top: 2px;
+    }
+
+    /* ── GRID BOTTOM ── */
+    .dash-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      animation: fadeUp .5s .2s ease both;
+    }
+
+    .dash-panel {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(16px);
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 4px 24px rgba(45, 106, 79, .1);
+      border: 1.5px solid var(--green-pale);
+    }
+
+    .dash-panel h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      color: var(--green-dark);
+      margin-bottom: 24px;
+      padding-bottom: 14px;
+      border-bottom: 1.5px solid var(--green-pale);
+    }
+
+    /* ── ACTIVITY LIST ── */
+    .activity-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .activity-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 16px;
+      background: var(--green-pale);
+      border-radius: 14px;
+      transition: background .2s;
+    }
+
+    .activity-item:hover {
+      background: var(--green-light);
+    }
+
+    .activity-icon {
+      font-size: 1.6rem;
+      flex-shrink: 0;
+    }
+
+    .activity-info {
+      flex: 1;
+    }
+
+    .activity-info .ai-title {
+      font-weight: 800;
+      font-size: .93rem;
+      color: var(--text-dark);
+    }
+
+    .activity-info .ai-date {
+      font-size: .8rem;
+      color: var(--text-mid);
+      margin-top: 2px;
+    }
+
+    .activity-pts {
+      font-weight: 900;
+      font-size: .95rem;
+      color: var(--green-dark);
+      white-space: nowrap;
+    }
+
+    .activity-pts.negative {
+      color: var(--orange);
+    }
+
+    /* ── REWARDS LIST ── */
+    .rewards-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .reward-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      border: 1.5px solid var(--green-pale);
+      border-radius: 16px;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    .reward-row:hover {
+      border-color: var(--green-mid);
+      box-shadow: 0 4px 16px rgba(82, 183, 136, .15);
+    }
+
+    .reward-row-emoji {
+      font-size: 1.8rem;
+      flex-shrink: 0;
+    }
+
+    .reward-row-info {
+      flex: 1;
+    }
+
+    .reward-row-info .rr-name {
+      font-weight: 800;
+      font-size: .93rem;
+      color: var(--text-dark);
+    }
+
+    .reward-row-info .rr-pts {
+      font-size: .8rem;
+      color: var(--text-mid);
+      margin-top: 2px;
+    }
+
+    .redeem-btn {
+      background: var(--green-dark);
+      color: #fff;
+      border: none;
+      border-radius: 50px;
+      padding: 8px 18px;
+      font-size: .82rem;
+      font-weight: 800;
+      cursor: pointer;
+      font-family: 'Nunito', sans-serif;
+      transition: background .2s, transform .2s;
+      white-space: nowrap;
+    }
+
+    .redeem-btn:hover {
+      background: var(--green-mid);
+      transform: translateY(-1px);
+    }
+
+    .redeem-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ── LOGOUT BUTTON in NAV ── */
+    .nav-logout {
+      background: transparent !important;
+      color: var(--orange) !important;
+      border: 2px solid var(--orange);
+      padding: 8px 20px;
+      border-radius: 50px;
+      font-weight: 800;
+      font-size: .88rem;
+      cursor: pointer;
+      transition: background .2s, color .2s;
+      text-decoration: none;
+    }
+
+    .nav-logout:hover {
+      background: var(--orange) !important;
+      color: #fff !important;
+    }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      right: 32px;
+      background: var(--green-dark);
+      color: #fff;
+      padding: 14px 24px;
+      border-radius: 16px;
+      font-weight: 700;
+      font-size: .93rem;
+      box-shadow: 0 8px 32px rgba(45, 106, 79, .3);
+      transform: translateY(80px);
+      opacity: 0;
+      transition: transform .35s ease, opacity .35s ease;
+      z-index: 9999;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    @media(max-width:900px) {
+      .dash-wrapper {
+        padding: 90px 20px 40px;
+      }
+
+      .welcome-banner {
+        padding: 28px 24px;
+      }
+
+      .dash-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media(max-width:600px) {
+      .welcome-banner h1 {
+        font-size: 1.5rem;
+      }
+
+      .points-bubble .pts-num {
+        font-size: 2.2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="logo">🏠 Eco<span>Track</span></a>
+    <div class="mobile-btn" onclick="toggleNav()">☰</div>
+     <ul id="nav-ul">
+  <li><a href="index.html#how">How It Works</a></li>
+  <li><a href="index.html#waste">Waste Types</a></li>
+  <li><a href="index.html#rewards">Rewards</a></li>
+  <li><a href="dashboard.html" class="nav-btn">Dashboard</a></li>
+  <li><a href="logout.php" class="nav-logout">Log Out</a></li>
+    </ul>
+  </nav>
+
+  <div class="dash-wrapper">
+
+    <!-- WELCOME BANNER -->
+    <div class="welcome-banner">
+      <div>
+        <h1 id="welcome-name">Welcome back! 👋</h1>
+        <p>Here's a summary of your recycling activity and available rewards.</p>
+      </div>
+      <div class="points-bubble">
+        <div class="pts-num" id="total-points">320</div>
+        <div class="pts-label">Total Points</div>
+      </div>
+    </div>
+
+    <!-- STAT CARDS -->
+    <div class="stat-cards">
+      <div class="stat-card">
+        <div class="stat-card-icon">♻️</div>
+        <div class="stat-card-info">
+          <div class="sc-num">14</div>
+          <div class="sc-label">Total Deliveries</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon">⚖️</div>
+        <div class="stat-card-info">
+          <div class="sc-num">38.5 kg</div>
+          <div class="sc-label">Waste Recycled</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon">🎁</div>
+        <div class="stat-card-info">
+          <div class="sc-num">0</div>
+          <div class="sc-label">Rewards Redeemed</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon">🌳</div>
+        <div class="stat-card-info">
+          <div class="sc-num">0</div>
+          <div class="sc-label">Trees Donated</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dash-panel" style="margin-bottom:28px">
+  <h3>♻️ Add Waste Delivery</h3>
+
+  <div class="form-group" style="margin-bottom:14px">
+    <label>Waste Type</label>
+    <select id="waste-type">
+      <option value="1">Plastic</option>
+      <option value="2">Glass</option>
+      <option value="3">Paper</option>
+      <option value="4">Metal</option>
+      <option value="5">E-Waste</option>
+    </select>
+  </div>
+
+  <div class="form-group" style="margin-bottom:14px">
+    <label>Waste Point</label>
+    <select id="waste-point">
+      <option value="1">Karabük Recycling Point</option>
+      <option value="2">Safranbolu Waste Point</option>
+    </select>
+  </div>
+
+  <div class="form-group" style="margin-bottom:18px">
+    <label>Amount (kg)</label>
+    <input type="number" id="waste-amount" step="0.1" placeholder="Enter amount">
+  </div>
+
+  <button class="redeem-btn" onclick="addDelivery()">
+    Scan QR & Submit Waste
+  </button>
+</div>
+
+    <!-- BOTTOM GRID -->
+    <div class="dash-grid">
+
+      <!-- RECENT ACTIVITY -->
+      <div class="dash-panel">
+        <h3>📋 Recent Activity</h3>
+       <div class="activity-list" id="activity-list">
+  <p>Loading...</p>
+</div>
+      </div>
+
+      <!-- REDEEM REWARDS -->
+      <div class="dash-panel">
+        <h3>🎁 Redeem Rewards</h3>
+        <div class="rewards-list">
+          <div class="reward-row">
+            <div class="reward-row-emoji">✏️</div>
+            <div class="reward-row-info">
+              <div class="rr-name">Plantable Pen</div>
+              <div class="rr-pts">30 points required</div>
+            </div>
+            <button class="redeem-btn" onclick="redeem(this, 30, 'Plantable Pen')">Redeem</button>
+          </div>
+          <div class="reward-row">
+            <div class="reward-row-emoji">🎟️</div>
+            <div class="reward-row-info">
+              <div class="rr-name">50 TL Discount Coupon</div>
+              <div class="rr-pts">50 points required</div>
+            </div>
+            <button class="redeem-btn" onclick="redeem(this, 50, '50 TL Coupon')">Redeem</button>
+          </div>
+          <div class="reward-row">
+            <div class="reward-row-emoji">🌳</div>
+            <div class="reward-row-info">
+              <div class="rr-name">Tree Donation</div>
+              <div class="rr-pts">75 points required</div>
+            </div>
+            <button class="redeem-btn" onclick="redeem(this, 75, 'Tree Donation')">Redeem</button>
+          </div>
+          <div class="reward-row">
+            <div class="reward-row-emoji">🎫</div>
+            <div class="reward-row-info">
+              <div class="rr-name">100 TL Discount Coupon</div>
+              <div class="rr-pts">100 points required</div>
+            </div>
+            <button class="redeem-btn" onclick="redeem(this, 100, '100 TL Coupon')">Redeem</button>
+          </div>
+          <div class="reward-row">
+            <div class="reward-row-emoji">🛍️</div>
+            <div class="reward-row-info">
+              <div class="rr-name">Cloth Bag</div>
+              <div class="rr-pts">150 points required</div>
+            </div>
+            <button class="redeem-btn" onclick="redeem(this, 150, 'Cloth Bag')">Redeem</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <footer>
+    <div class="footer-logo">Eco<span>Points</span></div>
+    <div class="footer-text">© 2026 EcoPoints. All rights reserved.</div>
+    <div class="footer-text">Built for a greener tomorrow 🌍</div>
+  </footer>
+
+ <script>
+  function loadRecentActivity() {
+  fetch("recent_activity.php?v=" + new Date().getTime())
+    .then(response => response.json())
+    .then(data => {
+      const list = document.getElementById("activity-list");
+
+      if (!data.success || data.activities.length === 0) {
+        list.innerHTML = "<p>No recent activity yet.</p>";
+        return;
+      }
+
+      list.innerHTML = data.activities.map(item => {
+        return `
+          <div class="activity-item">
+            <div class="activity-icon">♻️</div>
+            <div class="activity-info">
+              <div class="ai-title">${item.type_name} — ${item.amount} kg</div>
+              <div class="ai-date">${item.delivery_date} · ${item.point_name}</div>
+            </div>
+            <div class="activity-pts">+${item.point_amount} pts</div>
+          </div>
+        `;
+      }).join("");
+    })
+    .catch(() => {
+      document.getElementById("activity-list").innerHTML =
+        "<p>Could not load recent activity.</p>";
+    });
+}
+  function toggleNav() {
+    document.getElementById('nav-ul').classList.toggle('active');
+  }
+
+  let currentPoints = 0;
+
+  function showToast(msg) {
+    const toast = document.getElementById('toast');
+    toast.textContent = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+  }
+
+  function updatePoints() {
+    document.getElementById('total-points').textContent = currentPoints;
+    checkButtons();
+  }
+
+  function checkButtons() {
+    document.querySelectorAll('.redeem-btn').forEach(btn => {
+      const onclick = btn.getAttribute('onclick') || '';
+
+      // Add Delivery butonunu geç, sadece redeem butonlarını kontrol et
+      if (!onclick.includes('redeem')) return;
+
+      const match = onclick.match(/redeem\(this,\s*(\d+)/);
+      if (!match) return;
+
+      const cost = parseInt(match[1]);
+      btn.disabled = currentPoints < cost;
+    });
+  }
+
+  function loadDashboard() {
+    fetch("dashboard_api.php?v=" + new Date().getTime())
+      .then(response => response.json())
+      .then(data => {
+        if (data.error) {
+          showToast("❌ " + data.error);
+          return;
+        }
+
+        document.getElementById("welcome-name").textContent =
+          "Welcome back, " + data.name + "! 👋";
+
+        currentPoints = Number(data.total_point);
+        updatePoints();
+
+        document.querySelectorAll(".sc-num")[0].textContent = data.total_deliveries;
+        document.querySelectorAll(".sc-num")[1].textContent = Number(data.total_kg).toFixed(1) + " kg";
+        document.querySelectorAll(".sc-num")[2].textContent = data.rewards_redeemed;
+        document.querySelectorAll(".sc-num")[3].textContent = data.trees_donated;
+      })
+      .catch(() => {
+        showToast("❌ Dashboard data could not be loaded.");
+      });
+  }
+
+  function addDelivery() {
+    const waste_type_id = document.getElementById("waste-type").value;
+    const waste_point_id = document.getElementById("waste-point").value;
+    const amount = document.getElementById("waste-amount").value;
+
+    if (!amount || Number(amount) <= 0) {
+      showToast("❌ Please enter a valid amount.");
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("waste_type_id", waste_type_id);
+    formData.append("waste_point_id", waste_point_id);
+    formData.append("amount", amount);
+
+    fetch("add_delivery.php", {
+      method: "POST",
+      body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        showToast(
+          "📱 QR scanned successfully! +" +
+          data.earned_point +
+          " pts | Code: " +
+          data.qr_code
+        );
+
+        document.getElementById("waste-amount").value = "";
+
+        // En sağlam yöntem: DB'den güncel puanı ve kg değerini tekrar çek
+        loadDashboard();
+        loadRecentActivity();
+      } else {
+        showToast("❌ " + data.message);
+      }
+    })
+    .catch(() => {
+      showToast("❌ Server connection failed.");
+    });
+  }
+
+ function redeem(btn, cost, name) {
+  const formData = new FormData();
+  formData.append("reward_name", name);
+  formData.append("cost", cost);
+
+  fetch("redeem_reward.php", {
+    method: "POST",
+    body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.success) {
+      showToast("🎉 " + name + " redeemed! −" + cost + " pts");
+      loadDashboard();
+    } else {
+      showToast("❌ " + data.message);
+    }
+  })
+  .catch(() => {
+    showToast("❌ Server connection failed.");
+  });
+}
+
+  loadDashboard();
+  loadRecentActivity();
+</script>
+</body>
+
+</html>

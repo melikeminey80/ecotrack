@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>EcoTrack — Leaderboard</title><style>
+:root {
+  --green-dark:#2d6a4f; --green-mid:#52b788; --green-light:#b7e4c7;
+  --green-pale:#d8f3dc; --orange:#e76f51; --blue:#457b9d;
+  --cream:#f8f4e8; --text-dark:#1b2d23; --text-mid:#3a5a40; --gold:#f4a261;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Nunito',sans-serif;
+  background-image:url('/Resimler/Green Playful Eco Recycling Environmental Group Project Presentation.jpg');
+  background-size:cover;background-position:center;background-attachment:fixed;
+  color:var(--text-dark);overflow-x:hidden;
+}
+nav{position:fixed;top:0;left:0;width:100%;z-index:100;display:flex;justify-content:space-between;align-items:center;
+  padding:18px 60px;background:rgba(248,244,232,.85);backdrop-filter:blur(12px);border-bottom:1.5px solid var(--green-light)}
+.logo{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--green-dark)}
+.logo span{color:var(--orange)}
+nav ul{list-style:none;display:flex;gap:36px}
+nav ul li a{text-decoration:none;font-weight:700;font-size:.95rem;color:var(--text-mid);transition:color .2s}
+nav ul li a:hover{color:var(--green-dark)}
+.nav-btn{background:var(--green-dark);color:#fff!important;padding:10px 24px;border-radius:50px}
+#hero{min-height:100vh;display:flex;align-items:center;padding:120px 60px 80px;position:relative;overflow:hidden;justify-content:center}
+.blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.25;z-index:0}
+.blob-1{width:420px;height:420px;background:var(--green-mid);top:-80px;left:-100px}
+.blob-2{width:300px;height:300px;background:var(--gold);bottom:60px;right:80px}
+.blob-3{width:200px;height:200px;background:var(--blue);top:200px;right:300px}
+.hero-content{position:relative;z-index:1;max-width:620px}
+.hero-tag,.section-tag{display:inline-block;background:var(--green-pale);color:var(--green-dark);font-weight:800;font-size:.82rem;padding:6px 16px;border-radius:50px;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:22px}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,5vw,4.2rem);line-height:1.1;color:var(--green-dark);margin-bottom:24px}
+.hero-title span{color:var(--orange)}
+.hero-desc{font-size:1.1rem;line-height:1.75;color:var(--text-mid);margin-bottom:40px}
+.hero-btns{display:flex;gap:16px;flex-wrap:wrap}
+.btn-primary,.btn-secondary{padding:14px 36px;border-radius:50px;font-weight:800;font-size:1rem;text-decoration:none}
+.btn-primary{background:var(--green-dark);color:#fff;box-shadow:0 8px 24px rgba(45,106,79,.3)}
+.btn-secondary{background:transparent;color:var(--green-dark);border:2.5px solid var(--green-dark)}
+#how,#rewards{padding:100px 60px;background:var(--cream)}
+#waste,#leaderboard-page,#dashboard-page,#register-page{padding:120px 60px 80px;min-height:100vh;background:linear-gradient(135deg,var(--cream) 0%,var(--green-pale) 100%)}
+.section-header{text-align:center;margin-bottom:64px}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,3.5vw,3rem);color:var(--green-dark);line-height:1.2}
+.steps,.waste-grid,.rewards-grid,.cards-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:28px;max-width:1100px;margin:0 auto}
+.step-card,.waste-card,.dashboard-card,.reward-card-light{background:#fff;border-radius:24px;padding:32px 24px;text-align:center;box-shadow:0 4px 24px rgba(45,106,79,.08);border:1.5px solid var(--green-pale)}
+.step-num{background:var(--green-dark);color:white;width:36px;height:36px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:900;margin-bottom:12px}
+.step-icon,.waste-emoji{font-size:2.6rem;margin-bottom:12px}
+.step-title,.waste-name{font-weight:800;color:var(--green-dark);margin-bottom:8px}
+.step-desc{font-size:.92rem;color:var(--text-mid);line-height:1.6}
+.waste-pts,.reward-pts,.pill{display:inline-block;background:var(--green-pale);color:var(--green-dark);font-weight:800;font-size:.82rem;padding:5px 14px;border-radius:50px}
+.reward-card{background:var(--green-dark);border-radius:24px;padding:32px 24px;text-align:center;color:#fff;box-shadow:0 6px 24px rgba(45,106,79,.2)}
+.reward-emoji{font-size:2.6rem;margin-bottom:16px}
+.reward-name{font-weight:800;font-size:1.05rem;margin-bottom:10px}
+.lb-container,.form-container{max-width:850px;margin:0 auto;background:#fff;border-radius:24px;padding:40px;box-shadow:0 8px 32px rgba(45,106,79,.1);border:1.5px solid var(--green-light)}
+.lb-row{display:flex;align-items:center;padding:16px;border-radius:12px;margin-bottom:12px;border:1px solid var(--green-pale)}
+.lb-rank{font-size:1.2rem;font-weight:900;color:var(--green-mid);width:45px}
+.lb-name{flex:1;font-weight:800;color:var(--text-dark)}
+.lb-pts{font-weight:900;color:var(--green-dark);background:var(--green-pale);padding:6px 16px;border-radius:50px}
+.form-row{margin-bottom:16px}
+.form-row label{font-weight:700;color:var(--text-mid);display:block;margin-bottom:6px}
+input,select{width:100%;padding:13px 18px;border:2px solid var(--green-light);border-radius:14px;font-size:.95rem;background:#fafafa}
+.auth-submit{background:var(--green-dark);color:#fff;border:none;border-radius:50px;padding:15px 28px;font-size:1rem;font-weight:800;cursor:pointer}
+footer{background:var(--green-dark);color:#fff;padding:48px 60px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:24px}
+.footer-logo{font-family:'Playfair Display',serif;font-size:1.5rem;color:#fff}.footer-logo span{color:var(--gold)}.footer-text{font-size:.88rem;opacity:.7}
+.mobile-btn{display:none;font-size:1.8rem;cursor:pointer;color:var(--green-dark)}
+@media(max-width:900px){nav{padding:16px 24px}.mobile-btn{display:block}nav ul{position:absolute;top:100%;left:0;width:100%;background:rgba(248,244,232,.95);flex-direction:column;padding:24px;gap:24px;text-align:center;display:none}nav ul.active{display:flex}#hero,#how,#waste,#rewards,#leaderboard-page,#dashboard-page,#register-page{padding:100px 24px 60px}footer{padding:40px 24px;flex-direction:column;text-align:center}}
+</style></head>
+<body><nav>
+  <div class="logo">Eco<span>Track</span></div>
+  <div class="mobile-btn" onclick="toggleNav()">☰</div>
+  <ul id="nav-ul">
+    <li><a href="index.html#how">How It Works</a></li>
+    <li><a href="index.html#waste">Waste Types</a></li>
+    <li><a href="index.html#rewards">Rewards</a></li>
+    <li><a href="leaderboard.html">Leaderboard</a></li>
+    <li><a href="register.html" class="nav-btn">Log In / Register</a></li>
+  </ul>
+</nav>
+<section id="leaderboard-page">
+  <div class="lb-container">
+    <div class="section-header"><span class="section-tag">Ranking</span><h2 class="section-title">Leaderboard</h2></div>
+    <div id="lb-list"><p style="text-align:center;color:var(--text-mid)">Loading...</p></div>
+  </div>
+</section><footer>
+  <div class="footer-logo">Eco<span>Track</span></div>
+  <div class="footer-text">© 2026 EcoTrack. All rights reserved.</div>
+  <div class="footer-text">Built for a greener tomorrow 🌍</div>
+</footer><script>
+function toggleNav(){document.getElementById('nav-ul').classList.toggle('active');}
+
+// AJAX: Leaderboard verisini çek
+fetch('leaderboard_api.php')
+  .then(res => res.json())
+  .then(data => {
+    const list = document.getElementById('lb-list');
+    if (data.error) {
+      list.innerHTML = '<p style="text-align:center;color:#e63946">⚠️ ' + data.error + '</p>';
+      return;
+    }
+    if (!data.leaderboard || data.leaderboard.length === 0) {
+      list.innerHTML = '<p style="text-align:center;color:var(--text-mid)">No data yet.</p>';
+      return;
+    }
+    list.innerHTML = data.leaderboard.map((u, i) =>
+      '<div class="lb-row">' +
+        '<div class="lb-rank">' + (i + 1) + '</div>' +
+        '<div class="lb-name">' + u.display_name + '</div>' +
+        '<div class="lb-pts">' + u.total_point + ' pts</div>' +
+      '</div>'
+    ).join('');
+  })
+  .catch(() => {
+    document.getElementById('lb-list').innerHTML =
+      '<p style="text-align:center;color:#e63946">⚠️ Could not load leaderboard.</p>';
+  });
+</script></body></html>
