@@ -25,3 +25,9 @@ Users can deliver various types of waste to designated collection points and ear
 
 ## 📚 Academic Context
 Developed as a joint project for Internet-Based Programming and Database Systems courses.
+
+## 📸 Screenshots
+![Home Page](anasayfa.jpeg)
+![Dashboard](dashboard.jpeg)
+![Leaderboard](leaderboard.jpeg)
+![Login](login.jpeg)
